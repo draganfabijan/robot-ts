@@ -1,3 +1,4 @@
+import { Board } from './Board';
 export type Direction = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
 
 export interface RobotPosition {
@@ -8,27 +9,33 @@ export interface RobotPosition {
 
 export class Robot {
   position: RobotPosition;
+  board: Board;
 
-  constructor(position: RobotPosition) {
+  constructor(position: RobotPosition, board: Board) {
     this.position = position;
+    this.board = board;
   }
 
-  // Add additional check to see robot position and now allow to move outside of the board
-  // Also, add additional check to see if it is a hole
   move() {
-    switch (this.position.direction) {
+    let newPosition: RobotPosition = { ...this.position };
+
+    switch (newPosition.direction) {
       case 'NORTH':
-        this.position.y += 1;
+        newPosition.y += 1;
         break;
       case 'SOUTH':
-        this.position.y -= 1;
+        newPosition.y -= 1;
         break;
       case 'EAST':
-        this.position.x += 1;
+        newPosition.x += 1;
         break;
       case 'WEST':
-        this.position.x -= 1;
+        newPosition.x -= 1;
         break;
+    }
+
+    if (!this.board.hasHoleAt(newPosition.x, newPosition.y)) {
+      this.position = newPosition;
     }
   }
 

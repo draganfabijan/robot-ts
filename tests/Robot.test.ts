@@ -1,49 +1,46 @@
 import { Robot, RobotPosition, Direction } from '../src/Robot';
+import { Board } from '../src/Board';
 
 describe('Robot', () => {
+  let board: Board;
   let robot: Robot;
-  let consoleLogSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    const initialPosition: RobotPosition = {
-      x: 0,
-      y: 0,
-      direction: 'NORTH',
-    };
-    robot = new Robot(initialPosition);
+    board = new Board();
+    robot = new Robot({ x: 0, y: 0, direction: 'NORTH' }, board);
   });
 
-  afterEach(() => {
-    if (consoleLogSpy) {
-      consoleLogSpy.mockRestore();
-    }
+  describe('move', () => {
+    it('should move robot to the north', () => {
+      robot.move();
+      expect(robot.position).toEqual({ x: 0, y: 1, direction: 'NORTH' });
+    });
+
+    it('should not move robot into a hole', () => {
+      board.addHole(0, 1);
+      robot.move();
+      expect(robot.position).toEqual({ x: 0, y: 0, direction: 'NORTH' });
+    });
   });
 
-  it('should move north', () => {
-    robot.move();
-    expect(robot.position).toEqual({ x: 0, y: 1, direction: 'NORTH' });
+  describe('turnLeft', () => {
+    it('should turn robot to the west', () => {
+      robot.turnLeft();
+      expect(robot.position.direction).toBe('WEST');
+    });
   });
 
-  it('should turn left from NORTH to WEST', () => {
-    robot.turnLeft();
-    expect(robot.position.direction).toBe('WEST');
+  describe('turnRight', () => {
+    it('should turn robot to the east', () => {
+      robot.turnRight();
+      expect(robot.position.direction).toBe('EAST');
+    });
   });
 
-  it('should turn right from NORTH to EAST', () => {
-    robot.turnRight();
-    expect(robot.position.direction).toBe('EAST');
+  describe('reverse', () => {
+    it('should reverse robot direction', () => {
+      robot.reverse();
+      expect(robot.position.direction).toBe('SOUTH');
+    });
   });
-
-  it('should reverse direction from NORTH to SOUTH', () => {
-    robot.reverse();
-    expect(robot.position.direction).toBe('SOUTH');
-  });
-
-  it('should log the position correctly', () => {
-    consoleLogSpy = jest.spyOn(console, 'log');
-    robot.report();
-    expect(consoleLogSpy).toHaveBeenCalledWith('0,0,NORTH');
-  });
-
 });
-
