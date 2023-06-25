@@ -1,10 +1,9 @@
 import { Direction, RobotPosition } from './Robot';
-
-type HolePosition = { x: number; y: number; };
+import { Position } from './Board';
 
 export interface Command {
   position?: RobotPosition;
-  holePosition?: HolePosition;
+  holePosition?: Position;
 }
 
 export class CommandParser {

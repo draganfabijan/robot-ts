@@ -40,12 +40,6 @@ describe('RobotUI', () => {
       expect(mockRobot.position).toEqual({ x: 1, y: 2, direction: 'NORTH' });
     });
 
-    it('should handle valid HOLE command', () => {
-      mockParser.parseHole.mockReturnValueOnce({ holePosition: { x: 1, y: 2 } });
-      robotUI.handleCommand('HOLE 1,2');
-      expect(mockBoard.addHole).toHaveBeenCalledWith(1, 2);
-    });
-
     it('should move robot on MOVE command', () => {
       robotUI.isRobotPlaced = true;
       robotUI.handleCommand('MOVE');

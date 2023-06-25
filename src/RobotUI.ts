@@ -52,7 +52,7 @@ export class RobotUI {
     }
   }
 
-  private handleHole(input: string) {
+  handleHole(input: string) {
     const command: Command | undefined = this.parser.parseHole(input);
     if (command?.holePosition) {
       if (this.board.hasHoleAt(command.holePosition.x, command.holePosition.y)) {
