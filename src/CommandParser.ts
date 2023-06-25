@@ -1,7 +1,9 @@
 import { Direction, RobotPosition } from './Robot';
+import { Position } from './Board';
 
 export interface Command {
   position?: RobotPosition;
+  holePosition?: Position;
 }
 
 export class CommandParser {
@@ -23,6 +25,23 @@ export class CommandParser {
 
     return {
       position: { x: parsedX, y: parsedY, direction: direction as Direction },
+    };
+  }
+
+  parseHole(input: string): Command {
+    const command = input.trim().replace('HOLE ', '');
+    const params = command.split(",").map(param => param.trim());
+    const [x, y] = params;
+
+    const parsedX = parseInt(x);
+    const parsedY = parseInt(y);
+
+    if (isNaN(parsedX) || isNaN(parsedY)) {
+      throw new Error('Invalid position. x and y must be integers.');
+    }
+
+    return {
+      holePosition: { x: parsedX, y: parsedY },
     };
   }
 }
